@@ -1,0 +1,13 @@
+package io.github.com.Erissonteixeira.api_crudoficina;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class ApiCrudoficinaApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}

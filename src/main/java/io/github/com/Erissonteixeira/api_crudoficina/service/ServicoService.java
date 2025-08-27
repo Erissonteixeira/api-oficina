@@ -42,5 +42,12 @@ public class ServicoService {
             );
         });
     }
+    public boolean excluir(Long id){
+        if(repository.existsById(id)){
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 
 }

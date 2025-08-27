@@ -28,7 +28,18 @@ public class ServicoService {
                 .map(s -> new ServicoResponseDTO(s.getId(), s.getDescricao(), s.getValor(), s.getStatus()))
                 .collect(Collectors.toList());
     }
-    public Optional<ServicoResponseDTO> atualizar(Long id, ServicoRequestDTO dto){
+    public Optional<ServicoResponseDTO> buscarPorId(Long id) {
+        return repository.findById(id)
+                .map(s -> new ServicoResponseDTO(s.getId(), s.getDescricao(), s.getValor(), s.getStatus()));
+    }
+    public boolean excluir(Long id){
+        if(repository.existsById(id)){
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+    public Optional<ServicoResponseDTO> atualizar(Long id, ServicoRequestDTO dto) {
         return repository.findById(id).map(servico -> {
             servico.setDescricao(dto.getDescricao());
             servico.setValor(dto.getValor());
@@ -42,12 +53,4 @@ public class ServicoService {
             );
         });
     }
-    public boolean excluir(Long id){
-        if(repository.existsById(id)){
-            repository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
-
 }

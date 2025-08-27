@@ -13,6 +13,11 @@ public class ServicoService {
     public ServicoService(ServicoRepository repository) {
         this.repository = repository;
     }
+    public ServicoResponseDTO criar(ServicoRequestDTO dto){
+        Servico servico = new Servico(dto.getDescricao(), dto.getValor(), dto.getStatus());
+        Servico salvo = repository.save(servico);
+        return new ServicoResponseDTO(salvo.getId(), salvo.getDescricao(), salvo.getValor(), salvo.getStatus());
+    }
 
 
 }

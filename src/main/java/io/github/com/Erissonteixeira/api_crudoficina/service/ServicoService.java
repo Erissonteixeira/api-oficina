@@ -6,6 +6,9 @@ import io.github.com.Erissonteixeira.api_crudoficina.model.Servico;
 import io.github.com.Erissonteixeira.api_crudoficina.repository.ServicoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ServicoService {
     private final ServicoRepository repository;
@@ -18,6 +21,11 @@ public class ServicoService {
         Servico salvo = repository.save(servico);
         return new ServicoResponseDTO(salvo.getId(), salvo.getDescricao(), salvo.getValor(), salvo.getStatus());
     }
-
+    public List<ServicoResponseDTO> listarTodos(){
+        return repository.findAll()
+                .stream()
+                .map(s -> new ServicoResponseDTO(s.getId(), s.getDescricao(), s.getValor(), s.getStatus()))
+                .collect(Collectors.toList());
+    }
 
 }

@@ -7,6 +7,7 @@ import io.github.com.Erissonteixeira.api_crudoficina.repository.ServicoRepositor
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +27,20 @@ public class ServicoService {
                 .stream()
                 .map(s -> new ServicoResponseDTO(s.getId(), s.getDescricao(), s.getValor(), s.getStatus()))
                 .collect(Collectors.toList());
+    }
+    public Optional<ServicoResponseDTO> atualizar(Long id, ServicoRequestDTO dto){
+        return repository.findById(id).map(servico -> {
+            servico.setDescricao(dto.getDescricao());
+            servico.setValor(dto.getValor());
+            servico.setStatus(dto.getStatus());
+            Servico atualizado = repository.save(servico);
+            return new ServicoResponseDTO(
+                    atualizado.getId(),
+                    atualizado.getDescricao(),
+                    atualizado.getValor(),
+                    atualizado.getStatus()
+            );
+        });
     }
 
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/servicos")
+@RequestMapping("/servicos/v1")
 public class ServicoController {
 
     private final ServicoService service;
@@ -25,6 +25,12 @@ public class ServicoController {
     @GetMapping
     public ResponseEntity<List<ServicoResponseDTO>> listarTodos(){
         return ResponseEntity.ok(service.listarTodos());
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<ServicoResponseDTO> buscarPorId(@PathVariable Long id) {
+        return service.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
     @PutMapping("/{id}")
     public ResponseEntity<ServicoResponseDTO> atualizar(@PathVariable Long id, @RequestBody ServicoRequestDTO dto) {

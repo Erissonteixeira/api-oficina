@@ -107,6 +107,16 @@ public class ServicoControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         verify(service).atualizar(99L, request);
     }
+    @Test
+    @DisplayName("Deve excluir serviço existente e retornar status 204")
+    void shouldDeleteServiceWhenExistsAndStatus204(){
 
+        when(service.excluir(1L)).thenReturn(true);
+
+        ResponseEntity<Void> response = controller.excluir(1L);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(service).excluir(1L);
+    }
 
 }

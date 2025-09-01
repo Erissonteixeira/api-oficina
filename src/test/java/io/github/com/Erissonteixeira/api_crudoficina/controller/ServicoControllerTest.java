@@ -118,5 +118,16 @@ public class ServicoControllerTest {
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         verify(service).excluir(1L);
     }
+    @Test
+    @DisplayName("Deve retornar 404 ao excluir serviço inexistente")
+    void shouldReturn404WhenDeleteServiceNotFound(){
+
+        when(service.excluir(99L)).thenReturn(false);
+
+        ResponseEntity<Void> response = controller.excluir(99L);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(service).excluir(99L);
+    }
 
 }

@@ -13,10 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ServicoControllerTest {
@@ -40,5 +41,22 @@ public class ServicoControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         verifyNoMoreInteractions(service);
     }
+    @Test
+    @DisplayName("Deve listar todos os serviços e retornar status 200")
+    void shouldReturnAllServicesAndStatus200(){
+        List<ServicoResponseDTO> lista = Arrays.asList(
+                new ServicoResponseDTO(1l, "Troca de óleo", new BigDecimal("150.00"), "ATIVO"),
+                new ServicoResponseDTO(2L, "Alinhamento", new BigDecimal("200.00"), "ATIVO")
+        );
+
+        when(service.listarTodos()).thenReturn(lista);
+
+        ResponseEntity<List<ServicoResponseDTO>> response = controller.listarTodos();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(2, response.getBody().size());
+        verify(service).listarTodos();
+    }
+    
 
 }

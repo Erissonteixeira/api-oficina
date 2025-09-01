@@ -95,6 +95,18 @@ public class ServicoControllerTest {
         assertEquals(dto, response.getBody());
         verify(service).atualizar(1L, request);
     }
+    @Test
+    @DisplayName("Deve retornar 404 ao atualizar serviço inexistente")
+    void shouldReturn404WhenUpdateServiceNotFound(){
+        ServicoRequestDTO request = new ServicoRequestDTO("Alinhamento", new BigDecimal("200.00"), "ATIVO");
+
+        when(service.atualizar(99L, request)).thenReturn(Optional.empty());
+
+        ResponseEntity<ServicoResponseDTO> response = controller.atualizar(99L, request);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(service).atualizar(99L, request);
+    }
 
 
 }

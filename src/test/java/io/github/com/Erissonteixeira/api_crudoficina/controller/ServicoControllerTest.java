@@ -71,6 +71,16 @@ public class ServicoControllerTest {
         assertEquals(dto, response.getBody());
         verify(service).buscarPorId(1L);
     }
+    @Test
+    @DisplayName("Deve retornar 404 ao buscar serviço inexistente")
+    void shouldReturn404WhenServiceByIdNotFound(){
+        when(service.buscarPorId(99L)).thenReturn(Optional.empty());
+
+        ResponseEntity<ServicoResponseDTO> response = controller.buscarPorId(99L);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(service).buscarPorId(99L);
+    }
 
 
 }

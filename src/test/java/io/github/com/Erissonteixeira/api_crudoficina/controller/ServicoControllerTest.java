@@ -81,6 +81,20 @@ public class ServicoControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         verify(service).buscarPorId(99L);
     }
+    @Test
+    @DisplayName("Deve atualizar serviço existente e retornar status 200")
+    void shouldUpdateServiceWhenExistsAndStatus200(){
+        ServicoRequestDTO request = new ServicoRequestDTO("Alinhamento", new BigDecimal("200.00"), "ATIVO");
+        ServicoResponseDTO dto = new ServicoResponseDTO(1L, "Alinhamento", new BigDecimal("200.00"), "ATIVO");
+
+        when(service.atualizar(1L, request)).thenReturn(Optional.of(dto));
+
+        ResponseEntity<ServicoResponseDTO> response = controller.atualizar(1L, request);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(dto, response.getBody());
+        verify(service).atualizar(1L, request);
+    }
 
 
 }

@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -57,6 +58,18 @@ public class ServicoControllerTest {
         assertEquals(2, response.getBody().size());
         verify(service).listarTodos();
     }
-    
+    @Test
+    @DisplayName("Deve buscar serviço por id existente e retornar status 200")
+    void shouldReturnServiceByIdWhenExistAndStatus200(){
+        ServicoResponseDTO dto = new ServicoResponseDTO(1L, "Troca de óleo", new BigDecimal("150.00"), "ATIVO");
+
+        when(service.buscarPorId(1L)).thenReturn(Optional.of(dto));
+
+        ResponseEntity<ServicoResponseDTO> response = controller.buscarPorId(1L);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(dto, response.getBody());
+        verify(service).buscarPorId(1L);
+    }
 
 }

@@ -40,4 +40,5 @@ public class ServicoControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         verifyNoMoreInteractions(service);
     }
+
 }

@@ -11,6 +11,7 @@ import java.util.Set;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class ServicoRequestDTOTest {
 
@@ -33,4 +34,14 @@ public class ServicoRequestDTOTest {
 
         assertThat(violations, empty());
     }
+    @Test
+    @DisplayName("Deve falhar na validação quando campos obrigatórios forem nulos ou vazios")
+    void shouldFailValidationWhenFieldsAreEmptyOrNull(){
+        ServicoRequestDTO dto = new ServicoRequestDTO("", null, null);
+
+        Set<ConstraintViolation<ServicoRequestDTO>> violations = validator.validate(dto);
+
+        assertFalse(violations.isEmpty());
+    }
+
 }

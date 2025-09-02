@@ -1,5 +1,4 @@
 package io.github.com.Erissonteixeira.api_crudoficina.service;
-
 import io.github.com.Erissonteixeira.api_crudoficina.dto.ServicoRequestDTO;
 import io.github.com.Erissonteixeira.api_crudoficina.dto.ServicoResponseDTO;
 import io.github.com.Erissonteixeira.api_crudoficina.model.Servico;
@@ -156,5 +155,16 @@ public class ServicoServiceTest {
         verify(repository).existsById(1L);
         verify(repository).deleteById(1L);
     }
+    @Test
+    @DisplayName("Deve retornar false ao tentar excluir serviço inexistente")
+    void shouldReturnFalseWhenDeleteServiceNotFound(){
 
+        when(repository.existsById(99L)).thenReturn(false);
+
+        boolean deleted = service.excluir(99L);
+
+        assertEquals(false, deleted);
+
+        verify(repository).existsById(99L);
+    }
 }

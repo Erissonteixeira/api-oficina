@@ -130,4 +130,18 @@ public class ServicoServiceTest {
         verify(repository).save(existing);
 
     }
+    @Test
+    @DisplayName("Deve retornar vazio ao tentar atualizar serviço inexistente")
+    void shouldReturnEmptyWhenUpdateServicoNotFound(){
+        ServicoRequestDTO request = new ServicoRequestDTO("Alinhamento", new BigDecimal("200.00"),"ATIVO");
+
+        when(repository.findById(99L)).thenReturn(Optional.empty());
+
+        Optional<ServicoResponseDTO> response = service.atualizar(99L, request);
+
+        assertEquals(false, response.isPresent());
+
+        verify(repository).findById(99L);
+    }
+
 }

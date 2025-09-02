@@ -1,5 +1,7 @@
 package io.github.com.Erissonteixeira.api_crudoficina.model;
 import jakarta.persistence.*;
+import lombok.Builder;
+
 import java.math.BigDecimal;
 @Entity
 @Table(name = "servicos")
@@ -16,12 +18,13 @@ public class Servico {
 
     public Servico(){
     }
-
+    @Builder
     public Servico(String descricao, BigDecimal valor, String status){
         this.descricao = descricao;
         this.valor = valor;
         this.status = status;
     }
+
 
     public Long getId() {
         return id;

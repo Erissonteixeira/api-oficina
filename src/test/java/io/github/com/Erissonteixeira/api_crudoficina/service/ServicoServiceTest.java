@@ -10,8 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,7 +29,7 @@ public class ServicoServiceTest {
 
     @Test
     @DisplayName("Deve salvar um serviço com sucesso")
-    void shouldSaveServiceSucessFully(){
+    void shouldSaveServiceSucessFully() {
         ServicoRequestDTO request = new ServicoRequestDTO("Troca de óleo", new BigDecimal("150.00"), "ATIVO");
 
         Servico entity = Servico.builder()
@@ -46,5 +47,24 @@ public class ServicoServiceTest {
         assertEquals("ATIVO", response.getStatus());
 
         verify(repository).save(any(Servico.class));
+    }
+
+    @Test
+    @DisplayName("Deve listar todos os serviços")
+    void shouldlistAllServices() {
+        List<Servico> entidades = Arrays.asList(
+                Servico.builder().descricao("Troca de óleo").valor(new BigDecimal("150.00")).status("ATIVO").build(),
+                Servico.builder().descricao("Alinhamento").valor(new BigDecimal("200.00")).status("ATIVO").build()
+        );
+
+        when(repository.findAll()).thenReturn(entidades);
+
+        List<ServicoResponseDTO> lista = service.listarTodos();
+
+        assertEquals(2, lista.size());
+        assertEquals("Troca de óleo", lista.get(0).getDescricao());
+        assertEquals("Alinhamento", lista.get(1).getDescricao());
+
+        verify(repository).findAll();
     }
 }

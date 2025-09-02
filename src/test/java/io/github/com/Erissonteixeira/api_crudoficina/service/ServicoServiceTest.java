@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -66,5 +67,24 @@ public class ServicoServiceTest {
         assertEquals("Alinhamento", lista.get(1).getDescricao());
 
         verify(repository).findAll();
+    }
+    @Test
+    @DisplayName("Deve buscar serviço por id existente")
+    void shouldFindServiceByIdWhenExists(){
+
+        Servico entity = Servico.builder()
+                .descricao("Troca de óleo")
+                .valor(new BigDecimal("150.00"))
+                .status("ATIVO")
+                .build();
+
+        when(repository.findById(1L)).thenReturn(Optional.of(entity));
+
+        Optional<ServicoResponseDTO> response = service.buscarPorId(1L);
+
+        assertEquals(true, response.isPresent());
+        assertEquals("Troca de óleo", response.get().getDescricao());
+
+        verify(repository).findById(1L);
     }
 }

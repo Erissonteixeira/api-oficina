@@ -43,5 +43,13 @@ public class ServicoRequestDTOTest {
 
         assertFalse(violations.isEmpty());
     }
+    @Test
+    @DisplayName("Deve falhar na validação quando valor for zero ou negativo")
+    void shouldFailValidationWhenValueIsZeroOrNegative(){
+        ServicoRequestDTO dto = new ServicoRequestDTO("Alinhamento", new BigDecimal("-100.00"), "ATIVO");
 
+        Set<ConstraintViolation<ServicoRequestDTO>> violations = validator.validate(dto);
+
+        assertFalse(violations.isEmpty());
+    }
 }

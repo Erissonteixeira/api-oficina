@@ -143,5 +143,18 @@ public class ServicoServiceTest {
 
         verify(repository).findById(99L);
     }
+    @Test
+    @DisplayName("Deve excluir um serviço existente com sucesso")
+    void shouldDeleteServiceWhenExists() {
+
+        when(repository.existsById(1L)).thenReturn(true);
+
+        boolean deteted = service.excluir(1L);
+
+        assertEquals(true, deteted);
+
+        verify(repository).existsById(1L);
+        verify(repository).deleteById(1L);
+    }
 
 }

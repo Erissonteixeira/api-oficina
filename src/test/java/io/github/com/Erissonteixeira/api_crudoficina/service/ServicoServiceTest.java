@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -86,5 +85,49 @@ public class ServicoServiceTest {
         assertEquals("Troca de óleo", response.get().getDescricao());
 
         verify(repository).findById(1L);
+    }
+    @Test
+    @DisplayName("Deve retornar vazio ao buscar serviço inexistente")
+    void shouldReturnEmptyWhenServiceNotFound(){
+
+        when(repository.findById(99L)).thenReturn(Optional.empty());
+
+        Optional<ServicoResponseDTO> response = service.buscarPorId(99L);
+
+        assertEquals(false, response.isPresent());
+
+        verify(repository).findById(99L);
+    }
+    @Test
+    @DisplayName("Deve atualizar um serviço existente com sucesso")
+    void shouldUpdateServiceWhenExists(){
+        ServicoRequestDTO request = new ServicoRequestDTO("Alinhamento", new BigDecimal("200.00"), "ATIVO");
+
+        Servico existing = Servico.builder()
+                .descricao("Troca de óleo")
+                .valor(new BigDecimal("150.00"))
+                .status("ATIVO")
+                .build();
+
+        when(repository.findById(1L)).thenReturn(Optional.of(existing));
+
+        Servico updated = Servico.builder()
+                .descricao(request.getDescricao())
+                .valor(request.getValor())
+                .status(request.getStatus())
+                .build();
+
+        when(repository.save(existing)).thenReturn(updated);
+
+        Optional<ServicoResponseDTO> response = service.atualizar(1L, request);
+
+        assertEquals(true, response.isPresent());
+        assertEquals("Alinhamento", response.get().getDescricao());
+        assertEquals(new BigDecimal("200.00"), response.get().getValor());
+        assertEquals("ATIVO", response.get().getStatus());
+
+        verify(repository).findById(1L);
+        verify(repository).save(existing);
+
     }
 }
